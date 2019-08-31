@@ -1,0 +1,17 @@
+[lib]
+proc-macro = true
+path = "mod.rs"
+
+[package]
+name = "macro_rules_attribute-proc_macro"
+version = "0.0.1"
+authors = ["Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>"]
+edition = "2018"
+
+description = "Use declarative macros as proc_macro attributes or derives"
+license = "MIT"
+
+[dependencies]
+
+[features]
+verbose-expansions = []
