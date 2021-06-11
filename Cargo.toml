@@ -1,6 +1,6 @@
 [package]
 name = "macro_rules_attribute"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>"]
 edition = "2018"
 
@@ -18,7 +18,7 @@ readme = "README.md"
 [dependencies]
 
 [dependencies.proc_macro]
-version = "0.0.1"
+version = "0.0.2"
 package = "macro_rules_attribute-proc_macro"
 path = "src/proc_macro"
 

@@ -1,7 +1,8 @@
 //! Do not use this crate directly. Instead, use [`::macro_rules_attribute`](
 //! https://docs.rs/macro_rules_attribute)
 
-extern crate proc_macro; use ::proc_macro::*;
+extern crate proc_macro;
+use ::proc_macro::*;
 
 /// Applies the given `macro_rules!` macro to the decorated item.
 ///
@@ -10,7 +11,7 @@ extern crate proc_macro; use ::proc_macro::*;
 /// able to modify it_!).
 ///
 /// For a version with "read-only" access to the item it decorates, see
-/// [`macro_rules_derive`].
+/// [`macro_rules_derive`][`macro@macro_rules_derive`].
 ///
 /// # Example
 ///

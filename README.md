@@ -157,3 +157,32 @@ compile_time the exact macro call:
 ```toml
 [dependencies]
 macro_rules_attribute = { version = "...", features = ["verbose-expansions"] }
+```
+
+# The `#[apply(macro!)]` shorthand
+
+Just a convenient shorthand for `#[macro_rules_attribute(macro!)]`:
+
+### Example
+
+```rust,ignore
+#[macro_use]
+extern crate macro_rules_attribute;
+
+macro_rules! complex_cfg {( $item:item ) => (
+    #[cfg(any(
+        any(
+            foo,
+            feature = "bar",
+        ),
+        all(
+            target_os = "fenestrations",
+            not(target_arch = "Pear"),
+        ),
+    ))]
+    $item
+)}
+
+#[apply(complex_cfg!)]
+mod some_item { /* … */ }
+```
