@@ -2,9 +2,9 @@
     cfg_attr(all(), doc = include_str!("../README.md")),
 )]
 
-extern crate proc_macro;
+extern crate macro_rules_attribute_proc_macro;
 
-pub use proc_macro::{
+pub use macro_rules_attribute_proc_macro::{
     macro_rules_attribute,
     macro_rules_derive,
 };

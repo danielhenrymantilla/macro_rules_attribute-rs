@@ -17,14 +17,13 @@ readme = "README.md"
 
 [dependencies]
 
-[dependencies.proc_macro]
+[dependencies.macro_rules_attribute-proc_macro]
 version = "0.0.2"
-package = "macro_rules_attribute-proc_macro"
 path = "src/proc_macro"
 
 [features]
 nightly = []
-verbose-expansions = ["proc_macro/verbose-expansions"]
+verbose-expansions = ["macro_rules_attribute-proc_macro/verbose-expansions"]
 
 [package.metadata.docs.rs]
 features = [ "nightly" ]
