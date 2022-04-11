@@ -1,14 +1,14 @@
 [package]
 name = "macro_rules_attribute"
-version = "0.0.2"
+version = "0.1.0-rc1"  # Keep in sync
 authors = ["Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>"]
-edition = "2018"
+edition = "2021"
 
 documentation = "https://docs.rs/macro_rules_attribute"
 homepage = "https://crates.io/crates/macro_rules_attribute"
 repository = "https://github.com/danielhenrymantilla/macro_rules_attribute-rs"
 
-description = "Use declarative macros as proc_macro attributes or derives"
+description = "Use declarative macros in attribute or derive position"
 keywords = ["macro", "attribute", "decorator", "derive", "macro_rules"]
 categories = ["rust-patterns"]
 
@@ -16,14 +16,26 @@ license = "MIT"
 readme = "README.md"
 
 [dependencies]
+paste.version = "1.0.7"
 
 [dependencies.macro_rules_attribute-proc_macro]
-version = "0.0.2"
+version = "0.1.0-rc1"  # Keep in sync
 path = "src/proc_macro"
 
 [features]
+default = []
+
 nightly = []
-verbose-expansions = ["macro_rules_attribute-proc_macro/verbose-expansions"]
+verbose-expansions = [
+    "macro_rules_attribute-proc_macro/verbose-expansions",
+]
+
+[dev-dependencies]
+serde.version = "1.0.136"
+serde.features = ["derive"]
 
 [package.metadata.docs.rs]
 features = [ "nightly" ]
+
+[workspace]
+members = ["src/proc_macro"]

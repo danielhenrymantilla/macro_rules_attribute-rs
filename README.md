@@ -1,6 +1,20 @@
 # `::macro_rules_attribute`
 
-Use declarative macros as proc_macro attributes or derives.
+Use declarative macros in attribute or derive position.
+
+```rust ,ignore
+macro_rules! my_fancy_decorator { /* … */ }
+
+#[apply(my_fancy_decorator!)]
+struct Foo { /* … */ }
+```
+
+```rust ,ignore
+macro_rules! MyFancyDerive { /* … */ }
+
+#[derive(MyFancyDerive!)]
+struct Foo { /* … */ }
+```
 
 [![Latest version](https://img.shields.io/crates/v/macro_rules_attribute.svg)](https://crates.io/crates/macro_rules_attribute)
 [![Documentation](https://docs.rs/macro_rules_attribute/badge.svg)](https://docs.rs/macro_rules_attribute)
@@ -13,23 +27,22 @@ are sometimes not great, especially when decorating item definitions.
 
 Indeed, compare:
 
- 1. ```rust
-    # #[cfg(any())]
-    foo! {
-        struct Struct {
-            some_field: SomeType,
-        }
-    }
-    ```
-
- 1. ```rust
-    # #[cfg(any())]
-    #[foo]
+```rust ,ignore
+foo! {
     struct Struct {
         some_field: SomeType,
     }
-    ```
-___
+}
+```
+
+to:
+
+```rust ,ignore
+#[foo]
+struct Struct {
+    some_field: SomeType,
+}
+```
 
  1. The former does not scale well, since it leads to **rightward drift and
 "excessive" braces**.
@@ -53,22 +66,44 @@ ___
 
 ## Solution
 
-With the [`macro_rules_attribute`] and [`macro_rules_derive`] attributes, it is
-now possible to use `proc_macro_attribute` syntax to apply a `macro_rules!`
-macro:
+With this crate's <code>#\[[apply]\]</code> and <code>#\[[derive]\]</code>
+attributes, it is now possible to use `proc_macro_attribute` syntax to apply a
+`macro_rules!` macro:
+
+[apply]: https://docs.rs/macro_rules_attribute/0.1.0-rc1/macro_rules_attribute/attr.apply.html
+[derive]: https://docs.rs/macro_rules_attribute/0.1.0-rc1/macro_rules_attribute/attr.derive.html
 
 ```rust
-# use ::macro_rules_attribute::macro_rules_attribute;
-# macro_rules! foo {($($tt:tt)*) => ()}
-#
-#[macro_rules_attribute(foo!)]
+#[macro_use]
+extern crate macro_rules_attribute;
+
+macro_rules! foo {
+    // …
+    # ( $($tt:tt)* ) => ()
+}
+
+macro_rules! Bar {
+    // …
+    # ( $($tt:tt)* ) => ()
+}
+
+#[apply(foo)]
+#[derive(Debug, Bar!)]
 struct Struct {
     some_field: SomeType,
 }
+#
+# fn main() {}
 ```
 
 without even depending on [`::quote`], [`::syn`] or [`::proc-macro2`], for
 **fast compile times**.
+
+  - Note: for even faster compile times, feel free to disable the `derive-alias`
+    Cargo feature, should you not use it.
+
+    On my machine, that feature requires around 0.3s of extra compile-time,
+    which is not much, but still a 25% increase w.r.t. `--no-default-features`.
 
 [`macro_rules_attribute`]: https://docs.rs/macro_rules_attribute_proc_macro/0.0.1/macro_rules_attribute_proc_macro/attr.macro_rules_attribute.html
 [`macro_rules_derive`]: https://docs.rs/macro_rules_attribute_proc_macro/0.0.1/macro_rules_attribute_proc_macro/attr.macro_rules_derive.html
@@ -82,11 +117,8 @@ without even depending on [`::quote`], [`::syn`] or [`::proc-macro2`], for
 Deriving getters for a (non-generic) `struct`:
 
 ```rust
-# macro_rules! ignore {($($tt:tt)*) => () }
-# ignore! {
 #[macro_use]
 extern crate macro_rules_attribute;
-# }
 
 macro_rules! make_getters {(
     $(#[$struct_meta:meta])*
@@ -126,8 +158,7 @@ macro_rules! make_getters {(
 )}
 
 mod example {
-# use ::macro_rules_attribute::macro_rules_attribute;
-    #[macro_rules_attribute(make_getters!)]
+    #[apply(make_getters)]
     /// The macro handles meta attributes such as docstrings
     pub
     struct Person {
@@ -141,47 +172,71 @@ mod example {
 use example::Person;
 
 fn is_new_born (person: &'_ Person)
-    -> bool
+  -> bool
 {
     // person.age == 0
     // ^ error[E0616]: field `age` of struct `example::Person` is private
     *person.age() == 0
 }
+
+# fn main() {}
 ```
 
 # Debugging
 
 An optional compilation feature, `"verbose-expansions"` can be used to print at
-compile_time the exact macro call:
+compile-time the exact output of each macro invocation from this crate:
 
 ```toml
 [dependencies]
-macro_rules_attribute = { version = "...", features = ["verbose-expansions"] }
+macro_rules_attribute.version = "..."
+macro_rules_attribute.features = ["verbose-expansions"]
 ```
 
-# The `#[apply(macro!)]` shorthand
+# Bonus tricks
 
-Just a convenient shorthand for `#[macro_rules_attribute(macro!)]`:
+### `derive` aliases
 
-### Example
-
-```rust,ignore
+```rust
+# fn main() {}
 #[macro_use]
 extern crate macro_rules_attribute;
 
-macro_rules! complex_cfg {( $item:item ) => (
-    #[cfg(any(
+derive_alias! {
+    #[derive(Ord!)] = #[derive(PartialEq, Eq, PartialOrd, Ord)];
+}
+
+#[derive(Debug, Clone, Copy, Ord!)]
+struct Foo {
+    // …
+}
+```
+
+  - See [`derive_alias!`] and <code>#\[[derive]\]</code> for more info.
+
+[`derive_alias!`]: https://docs.rs/macro_rules_attribute/0.1.0-rc1/macro_rules_attribute/macro.derive_alias.html
+
+### `cfg` aliases
+
+```rust
+# fn main() {}
+#[macro_use]
+extern crate macro_rules_attribute;
+
+attribute_alias! {
+    #[apply(complex_cfg!)] = #[cfg(
         any(
-            foo,
-            feature = "bar",
+            any(
+                foo,
+                feature = "bar",
+            ),
+            all(
+                target_os = "fenestrations",
+                not(target_arch = "Pear"),
+            ),
         ),
-        all(
-            target_os = "fenestrations",
-            not(target_arch = "Pear"),
-        ),
-    ))]
-    $item
-)}
+    )];
+}
 
 #[apply(complex_cfg!)]
 mod some_item { /* … */ }
