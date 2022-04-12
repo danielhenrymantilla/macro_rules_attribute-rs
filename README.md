@@ -123,6 +123,8 @@ without even depending on [`::quote`], [`::syn`] or [`::proc-macro2`], for
 [`::proc-macro2`]: https://docs.rs/proc_macro2
 [`::syn`]: https://docs.rs/syn
 [`::quote`]: https://docs.rs/quote
+[`::pin-project`]: https://docs.rs/pin-project
+[`::pin-project-lite`]: https://docs.rs/pin-project-lite
 
 # Examples
 
