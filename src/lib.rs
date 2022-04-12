@@ -1,7 +1,9 @@
-#![cfg_attr(feature = "nightly",
-    cfg_attr(all(), doc = include_str!("../README.md")),
+#![doc = include_str!("../README.md")]
+#![cfg_attr(feature = "better-docs",
     feature(doc_auto_cfg),
 )]
+#![no_std]
+#![forbid(unsafe_code)]
 
 /// Legacy name for what is currently named <code>#\[[apply]]</code>
 ///
@@ -182,9 +184,9 @@ pub use ::macro_rules_attribute_proc_macro::macro_rules_attribute as apply;
 /// This, as with any `#[derive(...)]`, **does not consume** the item it
 /// decorates: instead, it only generates code on top of it.
 ///
-/// ## Example
+/// ## Examples
 ///
-/// Implementing `Into<Int>` for a given `#[repr(Int)]` `enum`:
+/// ### Implementing `Into<Int>` for a given `#[repr(Int)]` `enum`:
 ///
 /** ```rust
 #[macro_use]
@@ -399,7 +401,7 @@ macro_rules! derive_alias {(
                 macro_rules! [< $MacroName __derive_macro >] {(
                     $_($item:tt)*
                 ) => (
-                    $crate::ඞ_nested_derive! { // ඞ::nested_derive! {
+                    $crate::ඞ_nested_derive! {
                         #[derive($($derives)*)]
                         $_($item)*
                     }

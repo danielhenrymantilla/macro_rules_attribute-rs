@@ -73,27 +73,29 @@ jobs:
       - name: Cargo test (embedded doc tests)
         if: matrix.rust-toolchains == 'stable'
         uses: actions-rs/cargo@v1
+        env:
+          RUSTC_BOOTSTRAP: 1
         with:
           command: test
           args: --features better-docs --doc
 
-  # == UI TESTS ==
-  ui-test:
-    name: UI Tests
-    runs-on: ubuntu-latest
-    needs: [check]
-    steps:
-        - name: Install Rust toolchain
-          uses: actions-rs/toolchain@v1
-          with:
-            profile: default
-            override: true
-            toolchain: stable
+  # # == UI TESTS ==
+  # ui-test:
+  #   name: UI Tests
+  #   runs-on: ubuntu-latest
+  #   needs: [check]
+  #   steps:
+  #       - name: Install Rust toolchain
+  #         uses: actions-rs/toolchain@v1
+  #         with:
+  #           profile: default
+  #           override: true
+  #           toolchain: stable
 
-        - name: Clone repo
-          uses: actions/checkout@v2
+  #       - name: Clone repo
+  #         uses: actions/checkout@v2
 
-        # - name: Cargo UI test
-        #   uses: actions-rs/cargo@v1
-        #   with:
-        #     command: test-ui
+  #       - name: Cargo UI test
+  #         uses: actions-rs/cargo@v1
+  #         with:
+  #           command: test-ui

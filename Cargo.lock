@@ -4,22 +4,36 @@ version = 3
 
 [[package]]
 name = "macro_rules_attribute"
-version = "0.1.0-rc1"
+version = "0.1.0-rc2"
 dependencies = [
  "macro_rules_attribute-proc_macro",
+ "once_cell",
  "paste",
+ "pin-project-lite",
  "serde",
 ]
 
 [[package]]
 name = "macro_rules_attribute-proc_macro"
-version = "0.1.0-rc1"
+version = "0.1.0-rc2"
+
+[[package]]
+name = "once_cell"
+version = "1.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "87f3e037eac156d1775da914196f0f37741a274155e34a0b7e427c35d2a2ecb9"
 
 [[package]]
 name = "paste"
 version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0c520e05135d6e763148b6426a837e239041653ba7becd2e538c076c738025fc"
+
+[[package]]
+name = "pin-project-lite"
+version = "0.2.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e280fbe77cc62c91527259e9442153f4688736748d24660126286329742b4c6c"
 
 [[package]]
 name = "proc-macro2"

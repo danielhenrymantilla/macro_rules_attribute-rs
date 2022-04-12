@@ -1,6 +1,6 @@
 [package]
 name = "macro_rules_attribute"
-version = "0.1.0-rc1"  # Keep in sync
+version = "0.1.0-rc2"  # Keep in sync
 authors = ["Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>"]
 edition = "2021"
 
@@ -19,23 +19,30 @@ readme = "README.md"
 paste.version = "1.0.7"
 
 [dependencies.macro_rules_attribute-proc_macro]
-version = "0.1.0-rc1"  # Keep in sync
+version = "0.1.0-rc2"  # Keep in sync
 path = "src/proc_macro"
 
 [features]
 default = []
 
-nightly = []
+better-docs = []
 verbose-expansions = [
     "macro_rules_attribute-proc_macro/verbose-expansions",
 ]
 
 [dev-dependencies]
+once_cell.version = "1.10.0"
+pin-project-lite.version = "0.2.8"
 serde.version = "1.0.136"
 serde.features = ["derive"]
 
 [package.metadata.docs.rs]
-features = [ "nightly" ]
+features = [
+    "better-docs",
+]
+rustdoc-args = [
+    "--html-before-content", "fix-docsrs-li-details-summary.html",
+]
 
 [workspace]
 members = ["src/proc_macro"]
