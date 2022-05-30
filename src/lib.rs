@@ -1,3 +1,10 @@
+/*!
+[apply]: apply
+[derive]: derive
+[`derive_alias!`]: derive_alias
+[`macro_rules_attribute`]: macro_rules_attribute
+[`macro_rules_derive`]: macro_rules_derive
+*/
 #![doc = include_str!("../README.md")]
 #![cfg_attr(feature = "better-docs",
     feature(doc_auto_cfg),

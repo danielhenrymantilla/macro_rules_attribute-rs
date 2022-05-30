@@ -88,8 +88,6 @@ With this crate's <code>#\[[apply]\]</code> and <code>#\[[derive]\]</code>
 attributes, it is now possible to use `proc_macro_attribute` syntax to apply a
 `macro_rules!` macro:
 
-[apply]: https://docs.rs/macro_rules_attribute/0.1.0-rc1/macro_rules_attribute/attr.apply.html
-[derive]: https://docs.rs/macro_rules_attribute/0.1.0-rc1/macro_rules_attribute/attr.derive.html
 
 ```rust
 #[macro_use]
@@ -117,8 +115,6 @@ struct Struct {
 without even depending on [`::quote`], [`::syn`] or [`::proc-macro2`], for
 **fast compile times**.
 
-[`macro_rules_attribute`]: https://docs.rs/macro_rules_attribute_proc_macro/0.0.1/macro_rules_attribute_proc_macro/attr.macro_rules_attribute.html
-[`macro_rules_derive`]: https://docs.rs/macro_rules_attribute_proc_macro/0.0.1/macro_rules_attribute_proc_macro/attr.macro_rules_derive.html
 [`::paste`]: https://docs.rs/paste
 [`::proc-macro2`]: https://docs.rs/proc_macro2
 [`::syn`]: https://docs.rs/syn
@@ -281,7 +277,7 @@ for attribute-position polish!
 
 First, define the helper around, say, `OnceCell`'s `Lazy` type:
 
-```rust ,ignore
+```rust
 macro_rules! lazy_init {(
     $( #[$attrs:meta] )*
     $pub:vis
@@ -354,8 +350,6 @@ struct Foo {
 ```
 
   - See [`derive_alias!`] and <code>#\[[derive]\]</code> for more info.
-
-[`derive_alias!`]: https://docs.rs/macro_rules_attribute/0.1.0-rc1/macro_rules_attribute/macro.derive_alias.html
 
 ### `cfg` aliases
 
@@ -434,3 +428,7 @@ gained "namespace purity", hence my not using that pattern across the rest of
 the examples.
 
 </details>
+
+[apply]: https://docs.rs/macro_rules_attribute/0.1.*/macro_rules_attribute/attr.apply.html
+[derive]: https://docs.rs/macro_rules_attribute/0.1.*/macro_rules_attribute/attr.derive.html
+[`derive_alias!`]: https://docs.rs/macro_rules_attribute/0.1.*/macro_rules_attribute/macro.derive_alias.html
