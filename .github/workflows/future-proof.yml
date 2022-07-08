@@ -43,6 +43,10 @@ jobs:
 
       - name: Cargo test
         uses: actions-rs/cargo@v1
+        env:
+          RUSTDOCFLAGS: '-Zcrate-attr=feature(macro_attributes_in_derive_output)'
+          RUSTFLAGS: '-Zcrate-attr=feature(macro_attributes_in_derive_output)'
+          RUSTC_BOOTSTRAP: '1'
         with:
           command: test
           args: ${{ matrix.cargo-locked }}

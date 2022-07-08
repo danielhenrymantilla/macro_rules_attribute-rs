@@ -491,7 +491,7 @@ macro_rules! ඞ_with_dollar {( $($rules:tt)* ) => (
 )}
 
 /// Like <code>#\[[macro_rules_derive]\]</code>, but for allowing to be
-/// used to shadow [the "built-in" `#[derive]` attribute][1].
+/// used to shadow [the "built-in" `#[derive]` attribute][1] (on Rust ≥ 1.57.0).
 ///
 /// [1]: https://doc.rust-lang.org/stable/core/prelude/v1/macro.derive.html
 ///
