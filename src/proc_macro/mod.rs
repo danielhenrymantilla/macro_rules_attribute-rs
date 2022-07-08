@@ -4,6 +4,7 @@
 use {
     ::core::{
         ops::Not as _,
+        iter::FromIterator as _,
     },
     ::proc_macro::{*,
         TokenTree as TT,

@@ -2,7 +2,7 @@
 name = "macro_rules_attribute"
 version = "0.1.1"  # Keep in sync
 authors = ["Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>"]
-edition = "2021"
+edition = "2018"
 
 documentation = "https://docs.rs/macro_rules_attribute"
 homepage = "https://crates.io/crates/macro_rules_attribute"
