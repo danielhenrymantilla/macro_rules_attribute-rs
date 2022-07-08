@@ -21,7 +21,7 @@ jobs:
           - macos-latest
           - windows-latest
         rust-toolchains:
-          - 1.57.0
+          - 1.53.0
           - stable
           - beta
           - nightly
@@ -43,12 +43,16 @@ jobs:
 
       - name: Cargo test
         uses: actions-rs/cargo@v1
+        env:
+          RUSTDOCFLAGS: '-Zcrate-attr=feature(macro_attributes_in_derive_output)'
+          RUSTFLAGS: '-Zcrate-attr=feature(macro_attributes_in_derive_output)'
+          RUSTC_BOOTSTRAP: '1'
         with:
           command: test
           args: ${{ matrix.cargo-locked }}
 
       # - name: Cargo test (embed `README.md` + UI)
-      #   if: matrix.rust-toolchains != '1.57.0'
+      #   if: matrix.rust-toolchains != '1.53.0'
       #   uses: actions-rs/cargo@v1
       #   with:
       #     command: test-ui
