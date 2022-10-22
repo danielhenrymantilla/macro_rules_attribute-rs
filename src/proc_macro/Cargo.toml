@@ -9,6 +9,7 @@ authors = ["Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>"]
 edition = "2018"
 
 description = "Use declarative macros as proc_macro attributes or derives"
+repository = "https://github.com/danielhenrymantilla/macro_rules_attribute-rs"
 license = "MIT"
 
 [dependencies]
