@@ -12,7 +12,7 @@ struct Foo { /* … */ }
 ```rust ,ignore
 macro_rules! MyFancyDerive { /* … */ }
 
-#[derive(MyFancyDerive!)]
+#[derive(MyFancyDerive)]
 struct Foo { /* … */ }
 ```
 
