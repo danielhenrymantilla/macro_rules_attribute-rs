@@ -527,7 +527,7 @@ pub use ::macro_rules_attribute_proc_macro::derive;
 /// No-op macro that is automatically derived with [`derive`] or [`macro_rules_derive`]
 /// to allow using the `#[custom(...)]` and `#[derive_args(...)]` attribute.
 ///
-/// See https://github.com/danielhenrymantilla/macro_rules_attribute-rs/issues/9 for more info.
+/// See <https://github.com/danielhenrymantilla/macro_rules_attribute-rs/issues/9> for more info.
 pub use ::macro_rules_attribute_proc_macro::Custom;
 
 attribute_alias! {
