@@ -72,6 +72,7 @@ fn macro_rules_derive (
             })
             .flat_map(|attr| macro_rules_attribute_impl(attr, input.clone()))
     );
+    ret.extend(real_derive(ts!(::macro_rules_attribute::Custom)));
     ret.extend(input);
     #[cfg(feature = "verbose-expansions")]
     eprintln!("{}", ret);
@@ -86,29 +87,6 @@ fn derive (
 ) -> TokenStream
 {
     let attrs = attrs.vec();
-
-    fn real_derive (
-        derives: TokenStream,
-    ) -> TokenStream
-    {
-        // `#[::core::prelude::v1::derive( #derives )]`
-        TokenStream::from_iter([
-            TT::Punct(Punct::new('#', Spacing::Alone)),
-            TT::Group(Group::new(
-                Delimiter::Bracket,
-                {
-                    let mut ts: TokenStream = ts!(
-                        ::core::prelude::v1::derive
-                    );
-                    ts.extend([TT::Group(Group::new(
-                        Delimiter::Parenthesis,
-                        derives,
-                    ))]);
-                    ts
-                },
-            ))
-        ])
-    }
 
     // any `path::to::Macro!` in the derive list?
     if attrs.iter().any(is_punct('!')).not() {
@@ -164,20 +142,48 @@ fn derive (
     attrs_banged(true).for_each(|attr| {
         ret.extend(macro_rules_attribute_impl(attr, input.clone()))
     });
-    if attrs_banged(false).any(|_| true) {
-        ret.extend(real_derive(
-            attrs_banged(false)
-                .flat_map(|attr| attr.iter().cloned().chain(ts!(,)))
-                .collect()
-            ,
-        ));
-    }
+    ret.extend(real_derive(
+        attrs_banged(false)
+            .flat_map(|attr| attr.iter().cloned().chain(ts!(,)))
+            .chain(ts!(::macro_rules_attribute::Custom,))
+            .collect()
+        ,
+    ));
     ret.extend(input);
 
     #[cfg(feature = "verbose-expansions")]
     eprintln!("{}", ret);
     ret
 }
+
+#[proc_macro_derive(Custom, attributes(custom, derive_args))] pub
+fn custom(_:TokenStream) -> TokenStream {
+    TokenStream::new()
+}
+
+fn real_derive (
+    derives: TokenStream,
+) -> TokenStream
+{
+    // `#[::core::prelude::v1::derive( #derives )]`
+    TokenStream::from_iter([
+        TT::Punct(Punct::new('#', Spacing::Alone)),
+        TT::Group(Group::new(
+            Delimiter::Bracket,
+            {
+                let mut ts: TokenStream = ts!(
+                    ::core::prelude::v1::derive
+                );
+                ts.extend([TT::Group(Group::new(
+                    Delimiter::Parenthesis,
+                    derives,
+                ))]);
+                ts
+            },
+        ))
+    ])
+}
+
 
 #[::core::prelude::v1::derive(Clone, Copy)]
 struct PathIsBangTerminated(bool);

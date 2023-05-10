@@ -193,6 +193,9 @@ pub use ::macro_rules_attribute_proc_macro::macro_rules_attribute as apply;
 /// This, as with any `#[derive(...)]`, **does not consume** the item it
 /// decorates: instead, it only generates code on top of it.
 ///
+/// Also derives [`Custom`] to allow using `#[custom(...)]` and `#[derive_args(...)]`
+/// as derive helpers.
+///
 /// ## Examples
 ///
 /// ### Implementing `Into<Int>` for a given `#[repr(Int)]` `enum`:
@@ -516,7 +519,16 @@ fn main ()
 /// This is achieved thanks to **checking for the presence of a terminating `!`
 /// (or lack thereof)** to determine whether the given derive macro is a classic
 /// procedural macro one or a `macro_rules!` one.
+///
+/// Also derives [`Custom`] to allow using `#[custom(...)]` and `#[derive_args(...)]`
+/// as derive helpers.
 pub use ::macro_rules_attribute_proc_macro::derive;
+
+/// No-op macro that is automatically derived with [`derive`] or [`macro_rules_derive`]
+/// to allow using the `#[custom(...)]` and `#[derive_args(...)]` attribute.
+///
+/// See <https://github.com/danielhenrymantilla/macro_rules_attribute-rs/issues/9> for more info.
+pub use ::macro_rules_attribute_proc_macro::Custom;
 
 attribute_alias! {
     #[apply(this_macro_is_private!)] =
