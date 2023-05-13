@@ -8,7 +8,7 @@ find . \
     -print \
     -a \
     -exec \
-        sed -i -E "s/\".*?\"(  # Keep in sync)/\"$1\"\\1/g" '{}' \
+        sed -i -E "s/\"(=)?.*?\"(  # Keep in sync)/\"\\1$1\"\\2/g" '{}' \
     \;
 
 cargo update -v -w
