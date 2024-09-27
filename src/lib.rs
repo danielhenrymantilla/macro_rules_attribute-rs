@@ -419,7 +419,10 @@ macro_rules! derive_alias {
             }
         )}
     };
-    (pub #[derive($MacroName:ident !)] = #[derive($($derives:tt)*)];) => {
+    (
+        $( #[doc $($doc:tt)*] )*
+        pub #[derive($MacroName:ident !)] = #[derive($($derives:tt)*)];
+    ) => (
         $crate::ඞ_with_dollar! {( $_:tt ) => (
             $crate::ඞ::paste! {
                 // To avoid ambiguities with what the re-export
@@ -429,6 +432,7 @@ macro_rules! derive_alias {
                 // from the prelude would otherwise cause trouble with the
                 // re-export line.
                 #[allow(nonstandard_style)]
+                #[doc(hidden)]
                 #[macro_export]
                 macro_rules! [< $MacroName __derive_macro >] {(
                     $_($item:tt)*
@@ -438,11 +442,13 @@ macro_rules! derive_alias {
                         $_($item)*
                     }
                 )}
+             $( #[doc $($doc)*] )*
+                #[doc(inline)]
                 #[allow(unused_imports)]
                 pub use [< $MacroName __derive_macro >] as $MacroName;
             }
         )}
-    };
+    );
     (#[derive($($name_tt:tt)+)] = #[derive($($derives:tt)*)]; $($tt:tt)+) => {
         $crate::derive_alias!(#[derive($($name_tt)+)] = #[derive($($derives)*)];);
         $crate::derive_alias!($($tt)+);
