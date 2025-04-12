@@ -12,7 +12,7 @@ description = "Use declarative macros in attribute or derive position"
 keywords = ["macro", "attribute", "decorator", "derive", "macro_rules"]
 categories = ["rust-patterns"]
 
-license = "MIT"
+license = "Apache-2.0 OR MIT OR Zlib"
 readme = "README.md"
 
 [dependencies]
