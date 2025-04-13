@@ -8,9 +8,7 @@
 #![cfg_attr(feature = "better-docs",
     cfg_attr(all(), doc = include_str!("../README.md"))
 )]
-#![cfg_attr(feature = "better-docs",
-    feature(doc_auto_cfg),
-)]
+#![cfg_attr(feature = "better-docs", feature(doc_auto_cfg))]
 #![no_std]
 #![forbid(unsafe_code)]
 
@@ -395,36 +393,81 @@ struct Mejrs {
 ///
 /// </details>
 #[macro_export]
-macro_rules! derive_alias {(
-    $(
-        #[derive($MacroName:ident !)] = #[derive($($derives:tt)*)];
-    )*
-) => (
-    $crate::ඞ_with_dollar! {( $_:tt ) => (
+macro_rules! derive_alias {
+  (
+    #[derive($MacroName:ident !)] = #[derive($($derives:tt)*)];
+  ) => {
+    $crate::ඞ_with_dollar! {
+      ( $_:tt ) => (
         $crate::ඞ::paste! {
-            $(
-                // To avoid ambiguities with what the re-export
-                // refers to, let's use a hopefully unused name.
-                //
-                // Indeed, eponymous derive macros in scope such as those
-                // from the prelude would otherwise cause trouble with the
-                // re-export line.
-                #[allow(nonstandard_style)]
-                macro_rules! [< $MacroName __derive_macro >] {(
-                    $_($item:tt)*
-                ) => (
-                    $crate::ඞ_nested_derive! {
-                        #[derive($($derives)*)]
-                        $_($item)*
-                    }
-                )}
-                #[allow(unused_imports)]
-                pub(in crate) use [< $MacroName __derive_macro >] as $MacroName;
-            )*
-        }
-    )}
-)}
+          // To avoid ambiguities with what the re-export
+          // refers to, let's use a hopefully unused name.
+          //
+          // Indeed, eponymous derive macros in scope such as those
+          // from the prelude would otherwise cause trouble with the
+          // re-export line.
+          #[allow(nonstandard_style)]
+          macro_rules! [< $MacroName __derive_macro >] {
+            ( $_($item:tt)* ) => (
+              $crate::ඞ_nested_derive! {
+                #[derive($($derives)*)]
+                $_($item)*
+              }
+            )
+          }
 
+          #[allow(unused_imports)]
+          pub(in crate) use [< $MacroName __derive_macro >] as $MacroName;
+        }
+      )
+    }
+  };
+  (
+    $( #[doc $($doc:tt)*] )*
+    pub #[derive($MacroName:ident !)] = #[derive($($derives:tt)*)];
+  ) => (
+    $crate::ඞ_with_dollar! {
+      ( $_:tt ) => (
+        $crate::ඞ::paste! {
+          // To avoid ambiguities with what the re-export
+          // refers to, let's use a hopefully unused name.
+          //
+          // Indeed, eponymous derive macros in scope such as those
+          // from the prelude would otherwise cause trouble with the
+          // re-export line.
+          #[allow(nonstandard_style)]
+          #[doc(hidden)]
+          #[macro_export]
+          macro_rules! [< $MacroName __derive_macro >] {
+            ( $_($item:tt)* ) => (
+              $crate::ඞ_nested_derive! {
+                #[derive($($derives)*)]
+                $_($item)*
+              }
+            )
+          }
+
+          $( #[doc $($doc)*] )*
+          #[doc(inline)]
+          #[allow(unused_imports)]
+          pub use [< $MacroName __derive_macro >] as $MacroName;
+        }
+      )
+    }
+  );
+  (
+    #[derive($($name_tt:tt)+)] = #[derive($($derives:tt)*)]; $($tt:tt)+
+  ) => {
+    $crate::derive_alias!(#[derive($($name_tt)+)] = #[derive($($derives)*)];);
+    $crate::derive_alias!($($tt)+);
+  };
+  (
+    pub #[derive($($name_tt:tt)+)] = #[derive($($derives:tt)*)]; $($tt:tt)+
+  ) => {
+    $crate::derive_alias!(pub #[derive($($name_tt)+)] = #[derive($($derives)*)];);
+    $crate::derive_alias!($($tt)+);
+  };
+}
 
 /// Convenience macro to define new attribute aliases.
 ///
@@ -467,31 +510,69 @@ pub mod __macro_internals {
 ``` */
 ///
 #[macro_export]
-macro_rules! attribute_alias {(
-    $(
-        #[apply($name:ident $(!)?)] = $( #[$($attrs:tt)*] )+;
-    )*
-) => (
-    $(
-        $crate::ඞ_with_dollar! {( $_:tt ) => (
-            // Let's not do the paste + module + re-export dance here since it
-            // is less likely for an attribute name to collide with a prelude item.
-            #[allow(nonstandard_style)]
-            macro_rules! $name {( $_($item:tt)* ) => (
-             $( #[$($attrs)*] )+
-                $_($item)*
-            )}
-            #[allow(unused_imports)]
-            pub(in crate) use $name;
-        )}
-    )*
-)}
+macro_rules! attribute_alias {
+  (
+    #[apply($name:ident $(!)?)] = $( #[$($attrs:tt)*] )+;
+  ) => {
+    $crate::ඞ_with_dollar! {
+      ( $_:tt ) => (
+        // Let's not do the paste + module + re-export dance here since it
+        // is less likely for an attribute name to collide with a prelude item.
+        #[allow(nonstandard_style)]
+        macro_rules! $name {
+          ( $_($item:tt)* ) => (
+            $( #[$($attrs)*] )+
+            $_($item)*
+          )
+        }
+        #[allow(unused_imports)]
+        pub(in crate) use $name;
+      )
+    }
+  };
+  (
+    pub #[apply($name:ident $(!)?)] = $( #[$($attrs:tt)*] )+;
+  ) => {
+    $crate::ඞ_with_dollar! {
+      ( $_:tt ) => (
+        // Let's not do the paste + module + re-export dance here since it
+        // is less likely for an attribute name to collide with a prelude item.
+        #[allow(nonstandard_style)]
+        #[macro_export]
+        macro_rules! $name {
+          ( $_($item:tt)* ) => (
+            $( #[$($attrs)*] )+
+            $_($item)*
+          )
+        }
+        #[allow(unused_imports)]
+        pub use $name;
+      )
+    }
+  };
+  (
+    #[apply($($name_tt:tt)+)] = $( #[$($attrs:tt)*] )+; $($tt:tt)+
+  ) => {
+    $crate::attribute_alias!(#[apply($($name_tt)+)] = $(#[$($attrs)*])+;);
+    $crate::attribute_alias!($($tt)+);
+  };
+  (
+    pub #[apply($($name_tt:tt)+)] = $( #[$($attrs:tt)*] )+; $($tt:tt)*
+  ) => {
+    attribute_alias!(pub #[apply($($name_tt)+)] = $(#[$($attrs)*])+;);
+    attribute_alias!($($tt)+);
+  };
+}
 
-#[doc(hidden)] /** Not part of the public API*/ #[macro_export]
-macro_rules! ඞ_with_dollar {( $($rules:tt)* ) => (
+#[doc(hidden)]
+/** Not part of the public API*/
+#[macro_export]
+macro_rules! ඞ_with_dollar {
+  ( $($rules:tt)* ) => (
     macro_rules! __emit__ { $($rules)* }
     __emit__! { $ }
-)}
+  )
+}
 
 /// Like <code>#\[[macro_rules_derive]\]</code>, but for allowing to be
 /// used to shadow [the "built-in" `#[derive]` attribute][1] (on Rust ≥ 1.57.0).
@@ -531,38 +612,39 @@ pub use ::macro_rules_attribute_proc_macro::derive;
 pub use ::macro_rules_attribute_proc_macro::Custom;
 
 attribute_alias! {
-    #[apply(this_macro_is_private!)] =
-        #[doc(hidden)]
-        /// Not part of the public API
-        #[macro_export]
-    ;
+  #[apply(this_macro_is_private!)] =
+    #[doc(hidden)]
+    /// Not part of the public API
+    #[macro_export]
+  ;
 }
 
 mod nested_derive {
     //! Inlined mini-version of `::nested_derive`.
     #[crate::apply(this_macro_is_private!)]
     macro_rules! ඞ_nested_derive {
-        (
-            #[derive( $($Derives:tt)* )]
-            $($rest:tt)*
-        ) => (
-            #[$crate::derive( $($Derives)* )]
-            #[$crate::apply($crate::ඞ_dalek_EXTERMINATE!)]
-            $($rest)*
-        );
-    }
+    (
+      #[derive( $($Derives:tt)* )]
+      $($rest:tt)*
+    ) => (
+      #[$crate::derive( $($Derives)* )]
+      #[$crate::apply($crate::ඞ_dalek_EXTERMINATE!)]
+      $($rest)*
+    );
+  }
 
     // Ideally this would have been `dalek_☃_EXTERMINATE`, since the snowman
     // ressembles a Dalek more, which is a paramount aspect of this hidden macro
     // but for some reason Rust despises snowmen even though there are
     // ඞ-infected identifiers among (s)us…
     #[crate::apply(this_macro_is_private!)]
-    macro_rules! ඞ_dalek_EXTERMINATE {( $it:item ) => ()}
+    macro_rules! ඞ_dalek_EXTERMINATE {
+        ( $it:item ) => {};
+    }
 }
 
-#[doc(hidden)] /** Not part of the public API */ pub
-mod ඞ {
-    pub use {
-        ::paste::paste,
-    };
+#[doc(hidden)]
+/** Not part of the public API */
+pub mod ඞ {
+    pub use ::paste::paste;
 }
