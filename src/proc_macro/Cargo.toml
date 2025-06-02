@@ -10,7 +10,7 @@ edition = "2018"
 
 description = "Use declarative macros as proc_macro attributes or derives"
 repository = "https://github.com/danielhenrymantilla/macro_rules_attribute-rs"
-license = "MIT"
+license = "Apache-2.0 OR MIT OR Zlib"
 
 [dependencies]
 
