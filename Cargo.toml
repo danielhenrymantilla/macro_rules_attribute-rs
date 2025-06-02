@@ -1,6 +1,6 @@
 [package]
 name = "macro_rules_attribute"
-version = "0.2.1"  # Keep in sync
+version = "0.2.2"  # Keep in sync
 authors = ["Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>"]
 edition = "2018"
 
@@ -21,7 +21,7 @@ exclude = ["*.sh"]
 paste.version = "1.0.7"
 
 [dependencies.macro_rules_attribute-proc_macro]
-version = "=0.2.1"  # Keep in sync
+version = "=0.2.2"  # Keep in sync
 path = "src/proc_macro"
 
 [features]

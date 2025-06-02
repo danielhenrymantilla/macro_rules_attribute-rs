@@ -23,8 +23,8 @@ https://github.com/danielhenrymantilla/macro_rules_attribute-rs)
 https://crates.io/crates/macro_rules_attribute)
 [![Documentation](https://docs.rs/macro_rules_attribute/badge.svg)](
 https://docs.rs/macro_rules_attribute)
-[![MSRV](https://img.shields.io/badge/MSRV-1.53.0-white)](
-https://gist.github.com/danielhenrymantilla/8e5b721b3929084562f8f65668920c33)
+[![MSRV](https://img.shields.io/badge/MSRV-1.78.0-white)](
+https://gist.github.com/danielhenrymantilla/9b59de4db8e5f2467ed008b3c450527b)
 [![unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)](
 https://github.com/rust-secure-code/safety-dance/)
 [![License](https://img.shields.io/crates/l/macro_rules_attribute.svg)](

@@ -21,7 +21,7 @@ jobs:
           - macos-latest
           - windows-latest
         rust-toolchains:
-          - 1.53.0
+          - 1.78.0
           - stable
           - beta
           - nightly
@@ -52,7 +52,7 @@ jobs:
           args: ${{ matrix.cargo-locked }}
 
       # - name: Cargo test (embed `README.md` + UI)
-      #   if: matrix.rust-toolchains != '1.53.0'
+      #   if: matrix.rust-toolchains != '1.78.0'
       #   uses: actions-rs/cargo@v1
       #   with:
       #     command: test-ui
