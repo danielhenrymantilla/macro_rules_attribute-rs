@@ -220,7 +220,7 @@ fn is_path_bang_terminated (
     macro_rules! parse_optional_semicolons {() => (
         match tts.peek() {
             | Some(TT::Punct(p)) => {
-                drop(tts.next());
+                let _ = tts.next();
                 if p.as_char() == ':' && p.spacing() == Spacing::Joint {
                     match tts.next() {
                         | Some(TT::Punct(p))
@@ -241,7 +241,7 @@ fn is_path_bang_terminated (
 
     macro_rules! parse_trailing_comma {() => (
         if tts.peek().copied().map_or(false, is_punct(',')) {
-            drop(tts.next());
+            let _ = tts.next();
             if tts.next().is_some() {
                 return Err(());
             }
@@ -263,7 +263,7 @@ fn is_path_bang_terminated (
         }
         // or remains a punctuation: either a trailing `!`…
         if tts.peek().copied().map_or(false, is_punct('!')) {
-            drop(tts.next());
+            let _ = tts.next();
             // Now nothing remains (but for an optional trailing comma).
             parse_trailing_comma!();
             return if tts.next().is_none() {
