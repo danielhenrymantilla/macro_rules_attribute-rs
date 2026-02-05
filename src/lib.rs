@@ -9,7 +9,7 @@
     cfg_attr(all(), doc = include_str!("../README.md"))
 )]
 #![cfg_attr(feature = "better-docs",
-    feature(doc_auto_cfg),
+    feature(doc_cfg),
 )]
 #![no_std]
 #![forbid(unsafe_code)]
