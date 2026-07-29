@@ -563,6 +563,6 @@ mod nested_derive {
 #[doc(hidden)] /** Not part of the public API */ pub
 mod ඞ {
     pub use {
-        ::paste::paste,
+        ::pastey::paste,
     };
 }
